@@ -28,7 +28,15 @@ function! s:Send_to_Screen(text)
     call s:Screen_Vars()
   end
 
-  let escaped_text = substitute(shellescape(a:text), "\\\\\n", "\n", "g")
+  let transformed_text = a:text
+
+  if exists("&filetype")
+    if &filetype == "python"
+      let transformed_text = "%cpaste\n".a:text."--\n"
+    endif
+  endif
+
+  let escaped_text = substitute(shellescape(transformed_text), "\\\\\n", "\n", "g")
   call system("screen -S " . b:slime["sessionname"] . " -p " . b:slime["windowname"] . " -X stuff " . escaped_text)
 endfunction
 
