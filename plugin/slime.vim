@@ -32,7 +32,11 @@ function! s:Send_to_Screen(text)
 
   if exists("&filetype")
     if &filetype == "python"
+      " TODO: Make this toggle-able since ipython is non-default?
       let transformed_text = "%cpaste\n".a:text."--\n"
+    elseif &filetype == "scala"
+      " Use :paste mode to allow defining companion classes
+      let transformed_text = ":paste\n".a:text.""
     endif
   endif
 
